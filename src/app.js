@@ -2,6 +2,7 @@ var UI = require('ui');
 //var Settings = require('settings');
 var Vibe = require('ui/vibe');
 var Ajax = require('ajax');
+var Accel = require('ui/accel');
 
 var port = 8081;
 var host = 'macmini.lan';
@@ -9,10 +10,7 @@ var useSsl = false;
 
 var deviceList = [];
 
-function baseHost() {
-  var hostname = (useSsl ? 'https' : 'http') + '://' + host + ':' + port;
-  return hostname;
-}
+Accel.init();
 
 var main = new UI.Card({
   title: 'Butler',
@@ -25,8 +23,38 @@ var menu = new UI.Menu({
   sections: [{
     title: 'Butler Device List',
     items: []
-  }]
+  }],
+  fullscreen: true
 });
+menu.on('select', function(e) {
+  toggleDevice(e.itemIndex);
+});
+
+reloadDevices();
+
+Accel.on('tap', function(){
+  reloadDevices();
+});
+
+function reloadDevices() {
+  Ajax({ url: baseHost() + '/device/', type: 'json', method: 'get'},
+    function(data) {
+      console.log('Devices read: ' + data.devices.length);
+      deviceList = data.devices;
+      renderDeviceList();
+      
+      menu.show();
+      main.hide();
+    },
+    function(error){
+      console.log('Error fetching device list: ' + error);
+      main.body('Error feting devices!');
+      main.show();
+      menu.hide();
+      
+    }
+  );
+}
 
 function toggleDevice(index) {
   console.log('Clicked index: ' + index);
@@ -45,6 +73,7 @@ function toggleDevice(index) {
       function(data) {
         console.log('device new status: ' + data.status);
         deviceList[index].status = data.status;
+        renderDeviceList();
         Vibe.vibrate('short');
       },
       function(error){
@@ -57,31 +86,25 @@ function renderDeviceList(){
   for(var i = 0; i < deviceList.length; i++){
     var device = deviceList[i];
     console.log('rendering item: ' + device.name);
-    items[i] = { 
-      title: device.name, 
-      subtitle: 'status: ' + (device.status ? 'on' : 'off') 
-    };
+    items[i] = menuItem(device);
   }
   menu.items(0, items);
 }
+function menuItem(device){
+  return {
+    title: utf8(device.name),
+    subtitle: statusMessage(device.status)
+  };
+}
+function statusMessage(deviceStatus) {
+  return 'status: ' + (deviceStatus ? 'on' : 'off');
+}
+  
+function utf8(str) {
+  return unescape(encodeURI(str));
+}
 
-Ajax({ url: baseHost() + '/device/', type: 'json', method: 'get'},
-  function(data) {
-    console.log('Devices read: ' + data.devices.length);
-    deviceList = data.devices;
-    renderDeviceList();
-    
-    menu.show();
-    main.hide();
-  },
-  function(error){
-    console.log('Error fetching device list: ' + error);
-  }
-);
-
-menu.on('select', function(e) {
-  toggleDevice(e.itemIndex);
-});
-
-menu.show();
-
+function baseHost() {
+  var hostname = (useSsl ? 'https' : 'http') + '://' + host + ':' + port;
+  return hostname;
+}
