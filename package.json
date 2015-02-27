@@ -1,0 +1,26 @@
+{
+  "name": "butlerjs",
+  "version": "0.0.1",
+  "description": "Node JS port of Butler",
+  "main": "index.js",
+  "dependencies": {
+    "express": "~4.10.6",
+    "telldus": "0.0.9",
+    "request": "~2.53.0",
+    "node-uuid": "~1.4.2",
+    "suncalc": "~1.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/martingit/Butler.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/martingit/Butler/issues"
+  }
+}
