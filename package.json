@@ -8,7 +8,9 @@
     "telldus": "0.0.9",
     "request": "~2.53.0",
     "node-uuid": "~1.4.2",
-    "suncalc": "~1.6.0"
+    "suncalc": "~1.6.0",
+    "basic-auth": "~1.0.0",
+    "pem": "~1.7.1"
   },
   "devDependencies": {},
   "scripts": {

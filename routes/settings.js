@@ -14,4 +14,5 @@ router.get('/', function (req,res){
 router.post('/', jsonParser, function(req,res,next){
 	settingsHandler.save(req.body);
 });
+
 module.exports = router;

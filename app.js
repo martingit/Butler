@@ -1,4 +1,7 @@
 var express = require('express');
+var https = require('https');
+var pem = require('pem');
+var auth = require('basic-auth');
 var deviceRoute = require('./routes/device');
 var settingsRoute = require('./routes/settings');
 var scheduleRoute = require('./routes/schedule');
@@ -15,6 +18,29 @@ var isProcessing = false;
 var isWorking = false;
 var workerQueue = [];
 
+
+app.use(function(req, res, next) {
+  var settings = settingsHandler.get();
+  if (settings.isPasswordProtected){
+    var credentials = auth(req)
+
+    if (!credentials || credentials.name !== settings.userName || credentials.pass !== settings.userPassword) {
+      res.writeHead(401, {
+        'WWW-Authenticate': 'Basic realm="buttlejs"'
+      })
+      return res.end('OH no you didnt?!');
+    } else {
+      return next();
+    }
+  }
+  return next();
+});
+
+app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  return next();
+});
+
 app.use('/', express.static(__dirname + '/public'));
 app.use('/device', deviceRoute);
 app.use('/settings', settingsRoute);
@@ -23,19 +49,34 @@ app.use('/queue', queueRoute);
 
 app.disable('etag');
 
-app.use(function(req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    return next();
-  });
-var settings = settingsHandler.get();
-var server = app.listen(settings.httpServerPort, function () {
+var server;
 
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Listening at http://%s:%s', host, port);
-
+app.put('/settings/restart', function(req,res,next){
+  server.close();
+  startServer();
+  res.send({status: "Restarting server;"});
 });
+
+function startServer(){
+  var settings = settingsHandler.get();
+  if (settings.isSecureServer){
+    pem.createCertificate({days:1000, selfSigned:true}, function(err, keys){  
+      server = https.createServer({key: keys.serviceKey, cert: keys.certificate}, app).listen(settings.httpServerPort);
+      var host = server.address().address;
+      var port = server.address().port;
+      console.log('Listening at https://%s:%s', host, port);
+    });
+  } else {
+      server = app.listen(settings.httpServerPort, function () {
+
+      var host = server.address().address;
+      var port = server.address().port;
+
+      console.log('Listening at http://%s:%s', host, port);
+
+    });
+  }
+}
 
 function everySecond(){
   if (isProcessing){
@@ -93,3 +134,5 @@ function processWorkerQueue(){
 
 var everySecondInterval = setInterval(everySecond, 1000);
 var processWorkerQueueInterval = setInterval(processWorkerQueue, 300);
+
+startServer();
