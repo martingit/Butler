@@ -9,6 +9,7 @@ router.get('/', function (req,res){
 });
 
 router.get('/reload', function (req, res, next){
+	scheduleHandler.generateQueue();
 	res.send(scheduleHandler.getQueueList());
 });
 

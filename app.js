@@ -6,9 +6,14 @@ var queueRoute = require('./routes/queue');
 
 var scheduleHandler = require('./handlers/schedule');
 var settingsHandler = require('./handlers/settings');
+var deviceHandler = require('./handlers/device');
 
 var app = express();
 module.exports = app;
+
+var isProcessing = false;
+var isWorking = false;
+var workerQueue = [];
 
 app.use('/', express.static(__dirname + '/public'));
 app.use('/device', deviceRoute);
@@ -33,10 +38,58 @@ var server = app.listen(settings.httpServerPort, function () {
 });
 
 function everySecond(){
+  if (isProcessing){
+    console.log("Processing already in progress. I'll check again in a minute");
+    return;
+  }
 	var date = new Date();
-	if (date.getSeconds() == 0){
-		console.log("New minute has arrived: " + date.getHours() + ":" + date.getMinutes());
+	if (date.getSeconds() != 0){
+    return;
 	}
+  date.setMilliseconds(0);
+  console.log("New minute has arrived: " + date.getHours() + ":" + date.getMinutes());
+  isProcessing = true;
+
+  var queueList = scheduleHandler.getQueueList().items;
+  if (queueList.length == 0){
+    console.log("No queue found. Trying to generate new")
+    scheduleHandler.generateQueue();
+    queueList = scheduleHandler.getQueueList().items;
+  }
+  var workAdded = false;
+  console.log('Found ' + queueList.length + 'items to process');
+  for (var i = queueList.length - 1; i >= 0; i--) {
+    if (queueList[i].when.getTime() === date.getTime()){
+      var workerItem = {
+        deviceId: queueList[i].deviceId,
+        action: queueList[i].action,
+        level: 0,
+      };
+      if (!queueList[i].isRecurring){
+        scheduleHandler.disableScheduleItem(queueList[i].scheduleId);
+      }
+      workerQueue.push(workerItem);
+      workAdded = true;
+    }
+  };
+  if(workAdded){
+    scheduleHandler.generateQueue();
+    console.log('work added to queue');
+  }
+  console.log("Finished processing queue.");
+  isProcessing = false;
 }
 
-var interval = setInterval(everySecond, 1000);
+function processWorkerQueue(){
+  if (isWorking || workerQueue.length === 0){
+    return;
+  }
+  console.log('Found work to do.');
+  isWorking = true;
+  deviceHandler.updateDeviceStatus(workerQueue[0].deviceId, workerQueue[0].action, 0);
+  workerQueue.splice(0,1);
+  isWorking = false;
+}
+
+var everySecondInterval = setInterval(everySecond, 1000);
+var processWorkerQueueInterval = setInterval(processWorkerQueue, 300);

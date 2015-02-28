@@ -62,10 +62,15 @@ var telldus = require('telldus');
 		};
 		return null;
 	}
+	function getName(deviceId){
+		var device = getDeviceById(deviceId);
+		return device.name;
+	}
 	var devicehandler = {
 		updateDevices: updateDevices,
 		refreshDevices: refreshDevices,
 		getDevices: getDevices,
+		getName: getName,
 		getDeviceById: getDeviceById,
 		switchDevice: switchDevice,
 		dimDevice: dimDevice,
