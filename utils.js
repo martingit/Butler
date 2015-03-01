@@ -1,25 +1,5 @@
 (function() {
-/*
 
-Date.prototype.addHours = function (hours) {
-	var dat = new Date(this.valueOf());
- 	dat.setHours(dat.getHours()+hours);
-    return dat;
-}
-
-Date.prototype.addMinutes = function (minutes) {
-	var dat = new Date(this.valueOf());
- 	dat.setMinutes(dat.getMinutes() + minutes);
-    return dat;
-}
-Date.prototype.addDays = function(days) {
-    var dat = new Date(this.valueOf());
-    dat.setDate(dat.getDate() + days);
-    return dat;
-}
-
-
-*/
 	var utils = {
 		addMinutes: function(date, minutes){
 			date.setMinutes(date.getMinutes()+minutes);
