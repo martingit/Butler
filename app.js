@@ -119,7 +119,7 @@ function everySecond(){
     scheduleHandler.generateQueue();
     console.log('work added to queue');
   }
-  console.log("Finished processing queue.");
+  //console.log("Finished processing queue.");
   isProcessing = false;
 }
 
