@@ -4,13 +4,14 @@
   "description": "Node JS port of Butler",
   "main": "index.js",
   "dependencies": {
-    "express": "~4.10.6",
-    "telldus": "0.0.9",
-    "request": "~2.53.0",
-    "node-uuid": "~1.4.2",
-    "suncalc": "~1.6.0",
     "basic-auth": "~1.0.0",
-    "pem": "~1.7.1"
+    "body-parser": "^1.12.0",
+    "express": "~4.10.6",
+    "node-uuid": "~1.4.2",
+    "pem": "~1.7.1",
+    "request": "~2.53.0",
+    "suncalc": "~1.6.0",
+    "telldus": "0.0.9"
   },
   "devDependencies": {},
   "scripts": {
