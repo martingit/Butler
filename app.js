@@ -88,23 +88,25 @@ function everySecond(){
     return;
 	}
   date.setMilliseconds(0);
-  console.log("New minute has arrived: " + date.getHours() + ":" + date.getMinutes());
+  //console.log("New minute has arrived: " + date.getHours() + ":" + date.getMinutes());
   isProcessing = true;
 
   var queueList = scheduleHandler.getQueueList().items;
   if (queueList.length == 0){
-    console.log("No queue found. Trying to generate new")
+    //console.log("No queue found. Trying to generate new")
     scheduleHandler.generateQueue();
     queueList = scheduleHandler.getQueueList().items;
   }
   var workAdded = false;
-  console.log('Found ' + queueList.length + 'items to process');
+  //console.log('Found ' + queueList.length + 'items to process');
   for (var i = queueList.length - 1; i >= 0; i--) {
     if (queueList[i].when.getTime() === date.getTime()){
       var workerItem = {
         deviceId: queueList[i].deviceId,
         action: queueList[i].action,
         level: 0,
+        actionName: queueList[i].actionName,
+        deviceName: queueList[i].deviceName,
       };
       if (!queueList[i].isRecurring){
         scheduleHandler.disableScheduleItem(queueList[i].scheduleId);
@@ -125,8 +127,8 @@ function processWorkerQueue(){
   if (isWorking || workerQueue.length === 0){
     return;
   }
-  console.log('Found work to do.');
   isWorking = true;
+  console.log(workerQueue[0].actionName + " " + workerQueue[0].deviceName);
   deviceHandler.updateDeviceStatus(workerQueue[0].deviceId, workerQueue[0].action, 0);
   workerQueue.splice(0,1);
   isWorking = false;
