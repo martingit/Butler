@@ -26,8 +26,8 @@ var fs = require('fs');
 		item.id = uuid.v4();
 		item.dirty = false;
 		schedule.items.push(item);
-		return item;
 		saveSchedule();
+		return item;
 	}
 
 	function loadSchedule(){
