@@ -21,7 +21,9 @@ var workerQueue = [];
 
 app.use(function(req, res, next) {
   var settings = settingsHandler.get();
-  if (settings.isPasswordProtected){
+  var host = req.headers.host;
+  var hostName = host.substring(0, host.indexOf(':'));
+  if (settings.isPasswordProtected && hostName != '127.0.0.1' && hostName != 'localhost'){
     var credentials = auth(req)
 
     if (!credentials || credentials.name !== settings.userName || credentials.pass !== settings.userPassword) {
