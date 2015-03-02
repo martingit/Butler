@@ -92,8 +92,8 @@ var fs = require('fs');
         			actionName: getActionName(item.action),
         		};
 
-        		var hours = item.time.substring(0,2);
-        		var minutes = item.time.substring(3);
+        		var hours = parseInt(item.time.substring(0,2));
+        		var minutes = parseInt(item.time.substring(3));
         		var date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
 
         		//console.log("date: " + date);
