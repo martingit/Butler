@@ -207,8 +207,8 @@ var fs = require('fs');
 		return 0;
 	}
 	function whenCompare(a,b) {
-		var first = Date.parse("1900-01-01 " + a.when);
-		var second = Date.parse("1900-01-01 " + b.when);
+		var first = a.when;
+		var second = b.when;
 		if (first < second){
 			return -1;
 		}
