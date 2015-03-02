@@ -96,7 +96,7 @@ var fs = require('fs');
         		var minutes = item.time.substring(3);
         		var date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
 
-        		console.log("date: " + date);
+        		//console.log("date: " + date);
 
         		switch (item.timeTypeId){
         			case TimeType.SunrisePlus:
