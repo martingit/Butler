@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
   var settings = settingsHandler.get();
   var host = req.headers.host;
   var hostName = host.substring(0, host.indexOf(':'));
-  if (settings.isPasswordProtected && hostName != '127.0.0.1' && hostName != 'localhost'){
+  if (settings.isPasswordProtected && hostName != '127.0.0.1' && hostName != 'localhost' && settings.userName && settings.userPassword){
     var credentials = auth(req)
 
     if (!credentials || credentials.name !== settings.userName || credentials.pass !== settings.userPassword) {
