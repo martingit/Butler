@@ -2,7 +2,7 @@ var express = require('express');
 var telldus = require('telldus');
 var bodyParser = require('body-parser');
 
-var deviceHandler = require('../handlers/device');
+var deviceHandler = require('../modules/device');
 
 var router = express.Router();
 var jsonParser = bodyParser.json();
