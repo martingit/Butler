@@ -13,6 +13,16 @@ var TimeType = {
 	SunsetPlus: 3,
 	SunsetMinus: 4,
 };
+function getSunrise(){
+	var settings = settingsModule.settings;
+	var times = suncalc.getTimes(new Date(), settings.latitude, settings.longitude);
+	return times.sunrise;
+}
+function getSunset(){
+	var settings = settingsModule.settings;
+	var times = suncalc.getTimes(new Date(), settings.latitude, settings.longitude);
+	return times.sunset;
+}
 
 module.exports = {
 	scheduleList: [],
@@ -173,16 +183,6 @@ module.exports = {
 	},
 	getQueueList: function(){
 		return {items: module.exports.queueList};
-	},
-	getSunrise: function(){
-		var settings = settingsModule.settings;
-		var times = suncalc.getTimes(new Date(), settings.latitude, settings.longitude);
-		return times.sunrise;
-	},
-	getSunset: function(){
-		var settings = settingsModule.settings;
-		var times = suncalc.getTimes(new Date(), settings.latitude, settings.longitude);
-		return times.sunset;
 	},
 	getScheduleList: function(){
 		return {items: module.exports.scheduleList};
