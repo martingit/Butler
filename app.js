@@ -86,6 +86,6 @@ function startServer(){
   }
 }
 
-var everySecondInterval = setInterval(timerModule.everySecond, 1000);
+timerModule.run();
 
 startServer();

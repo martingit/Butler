@@ -101,7 +101,11 @@ module.exports = {
 	loadSchedule: function(){
 	  try {
 		var data = fs.readFileSync('./schedule.json');
-	    module.exports.scheduleList = JSON.parse(data);
+	    var schedule = JSON.parse(data);
+	    if (schedule.items){
+	    	schedule = schedule.items;
+	    }
+	    module.exports.scheduleList = schedule;
 	  }
 	  catch (err) {
 	    console.log('There has been an error parsing your JSON.')

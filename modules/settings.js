@@ -20,7 +20,15 @@ module.exports = {
 	  }
 	},
 	save: function(newSettings){
-		module.exports.settings = newSettings;
+		var settings = module.exports.settings;
+		settings.httpServerPort = newSettings.httpServerPort;
+		settings.isPasswordProtected = newSettings.isPasswordProtected;
+		settings.userName = newSettings.userName;
+		settings.userPassword = newSettings.userPassword;
+		settings.longitude = newSettings.longitude;
+		settings.latitude = newSettings.latitude;
+		module.exports.settings = settings;
+		
 		var data = JSON.stringify(module.exports.settings);
 		fs.writeFile('./settings.json', data, function (err) {
 	    if (err) {
