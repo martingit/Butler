@@ -12,30 +12,33 @@ router.get('/', function (req,res){
 });
 
 router.post('/', jsonParser, function (req, res){
-	var deviceId = parseInt(req.body.deviceId);
-	var status = false;
-	if(req.body.status === 'true'){
-		status = true;
-	} else if (req.body.status === 'false'){
-		status = false;
-	} else {
-		status = undefined;
+	if (typeof(req.body.status) !== "boolean"){
+		req.body.status = undefined;
 	}
-	if (deviceId === undefined || status === undefined){
-		res.send('not valid params');
+	if (typeof(req.body.deviceId) !== "number"){
+		req.body.deviceId = undefined
+	}
+	if (req.body.deviceId === undefined || req.body.status === undefined){
+		res.status(404);
+		res.send({status: "not found"});
 		return;
 	}
-	var device = deviceHandler.updateDeviceStatus(deviceId, status);
+	var device = deviceHandler.updateDeviceStatus(req.body.deviceId, req.body.status);
 	res.send(device);
 });
 router.put('/', jsonParser, function (req, res){
-	var deviceId = parseInt(req.body.deviceId);
-	var level = parseInt(req.body.level);
-	if (deviceId === NaN || level === NaN){
-		res.send({status: "Invalid params"});
+	if (typeof(req.body.level) !== "number"){
+		req.body.level = undefined;
+	}
+	if (typeof(req.body.deviceId) !== "number"){
+		req.body.deviceId = undefined
+	}
+	if (req.body.deviceId === undefined || req.body.level === undefined){
+		res.status(404);
+		res.send({status: "not found"});
 		return;
 	}
-	var device = deviceHandler.updateDeviceStatus(deviceId, null, level);
+	var device = deviceHandler.updateDeviceStatus(req.body.deviceId, null, req.body.level);
 	res.send(device);
 });
 router.route('/reload').get(function (req, res) {
