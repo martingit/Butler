@@ -1,2 +1,2 @@
 #!/bin/bash
-node app.js
+forever -o debug.log start app.js
