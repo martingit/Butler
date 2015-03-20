@@ -30,7 +30,11 @@ router.post('/', jsonParser, function (req, res, next){
 
 //Delete
 router.delete('/:id', jsonParser, function (req, res, next){
-	var itemId = req.params.id;
+	var itemId = parseInt(req.params.id);
+	if (itemId === NaN){
+		res.send({status: "Invalid params"});
+		return;
+	}
 	scheduleHandler.removeScheduleItem(itemId);
 	res.send({status: "Deleted"});
 });

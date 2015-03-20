@@ -12,14 +12,29 @@ router.get('/', function (req,res){
 });
 
 router.post('/', jsonParser, function (req, res){
-	var deviceId = req.body.deviceId;
-	var status = req.body.status;
+	var deviceId = parseInt(req.body.deviceId);
+	var status = false;
+	if(req.body.status === 'true'){
+		status = true;
+	} else if (req.body.status === 'false'){
+		status = false;
+	} else {
+		status = undefined;
+	}
+	if (deviceId === undefined || status === undefined){
+		res.send('not valid params');
+		return;
+	}
 	var device = deviceHandler.updateDeviceStatus(deviceId, status);
 	res.send(device);
 });
 router.put('/', jsonParser, function (req, res){
-	var deviceId = req.body.deviceId;
-	var level = req.body.level;
+	var deviceId = parseInt(req.body.deviceId);
+	var level = parseInt(req.body.level);
+	if (deviceId === NaN || level === NaN){
+		res.send({status: "Invalid params"});
+		return;
+	}
 	var device = deviceHandler.updateDeviceStatus(deviceId, null, level);
 	res.send(device);
 });

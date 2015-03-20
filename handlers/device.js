@@ -3,6 +3,15 @@ var telldus = require('telldus');
 	var _global = this;
 	var devices = [];
 	
+	function nameCompare(a,b) {
+		if (a.name < b.name){
+			return -1;
+		}
+		if (a.name > b.name){
+			return 1;
+		}
+		return 0;
+	}
 	function updateDevices(list) {
 		devices = [];
 		for (var i = 0; i < list.length; i++) {
@@ -16,6 +25,7 @@ var telldus = require('telldus');
 	            "type": device.model,
 	        });
 		}
+		devices = devices.sort(nameCompare);
 	}
 	function refreshDevices(){
 		console.log('loading devices from telldus');
