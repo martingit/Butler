@@ -157,10 +157,10 @@ module.exports = {
 				}
 				list.push(timeline);
 			}
-			if (minDate < item.when) {
+			if (minDate > item.when) {
 				minDate = item.when;
 			}
-			if (maxDate > item.when) {
+			if (maxDate < item.when) {
 				maxDate = item.when;
 			}
 		}
