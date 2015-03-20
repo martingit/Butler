@@ -23,7 +23,47 @@ function getSunset(){
 	var times = suncalc.getTimes(new Date(), settings.latitude, settings.longitude);
 	return times.sunset;
 }
-
+function timeCompare(a,b) {
+	var first = Date.parse("1900-01-01 " + a.time);
+	var second = Date.parse("1900-01-01 " + b.time);
+	if (first < second){
+		return -1;
+	}
+	if (first > second){
+		return 1;
+	}
+	return 0;
+}
+function whenCompare (a,b) {
+	var first = a.when;
+	var second = b.when;
+	if (first < second){
+		return -1;
+	}
+	if (first > second){
+		return 1;
+	}
+	return 0;
+}
+function nameThenWhenComare(a,b){
+	var firstName = a.deviceName;
+	var firstWhen = a.when;
+	var secondName = b.deviceName;
+	var secondWhen = b.when;
+	if (firstName < secondName){
+		return -1;
+	}
+	if (firstName > secondName){
+		return 1;
+	}
+	if (firstWhen < secondWhen){
+		return -1;
+	}
+	if (firstWhen > secondWhen){
+		return 1;
+	}
+	return 0;
+}
 module.exports = {
 	scheduleList: [],
 	queueList: [],
@@ -32,7 +72,7 @@ module.exports = {
 		var now = new Date();
 		console.log(now + ' generating queue')
 		var list = [];
-		var sortedList = this.scheduleList.sort(module.exports.timeCompare);
+		var sortedList = this.scheduleList.sort(timeCompare);
 		for (var i = 0; i < sortedList.length; i++) {
         	var item = sortedList[i];
         	if (item.enabled){
@@ -88,7 +128,52 @@ module.exports = {
         		}
         	}
     	}
-    	module.exports.queueList = list.sort(module.exports.whenCompare);
+    	module.exports.generateTimeline();
+    	module.exports.queueList = list.sort(whenCompare);
+	},
+	generateTimeline: function(){
+		var queue = module.exports.queueList.sort(nameThenWhenComare);
+		var list = [];
+		var minDate = Date.parse('2500-01-01 24:59');
+		var maxDate = Date.parse('1900-01-01 00:00');
+		for (var i = 0; i < queue.length; i++){
+			var item = queue[i];
+			var updatedItem = false;
+			for (var j = 0; j < list.length; j++){
+				var timelineItem = list[j];
+				if (timelineItem.deviceId === item.deviceId){
+					if (timelineItem.end === undefined && !item.action){
+	                    timelineItem.end = item.when;
+	                    updatedItem = true;
+	                }
+				}
+			}
+			if (!updatedItem) {
+				var timeline = { deviceId: item.deviceId, deviceName: item.deviceName, end: undefined, start: undefined };
+				if (item.action){
+                	timeline.start = item.when;
+				}	else {
+					timeline.end = item.when;
+				}
+				list.push(timeline);
+			}
+			if (minDate < item.when) {
+				minDate = item.when;
+			}
+			if (maxDate > item.when) {
+				maxDate = item.when;
+			}
+		}
+		for (var i = list.length - 1; i >= 0; i--) {
+			var timelineItem = list[i];
+			if (timelineItem.start === undefined){
+				timelineItem.start = new Date();
+			}
+			if (timelineItem.end === undefined){
+				timelineItem.end = maxDate;
+			}
+		};
+		module.exports.timeline = {items: list};
 	},
 	addScheduleItem: function (item){
 		item.id = uuid.v4();
@@ -194,26 +279,5 @@ module.exports = {
 	getTimeline: function(){
 		return module.exports.timeline;
 	},
-	timeCompare: function(a,b) {
-		var first = Date.parse("1900-01-01 " + a.time);
-		var second = Date.parse("1900-01-01 " + b.time);
-		if (first < second){
-			return -1;
-		}
-		if (first > second){
-			return 1;
-		}
-		return 0;
-	},
-	whenCompare: function(a,b) {
-		var first = a.when;
-		var second = b.when;
-		if (first < second){
-			return -1;
-		}
-		if (first > second){
-			return 1;
-		}
-		return 0;
-	},
+
 };
