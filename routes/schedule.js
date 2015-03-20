@@ -1,30 +1,30 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-var scheduleHandler = require('../handlers/schedule');
+var scheduleModule = require('../modules/schedule');
 
 var router = express.Router();
 var jsonParser = bodyParser.json();
 
 router.get('/', function (req,res){
-	res.send(scheduleHandler.getScheduleList());
+	res.send(scheduleModule.getScheduleList());
 });
 
 router.get('/timeline', function (req, res, next){
-	res.send(scheduleHandler.getTimeline());
+	res.send(scheduleModule.getTimeline());
 });
 
 //Add
 router.put('/', jsonParser, function (req, res, next){
 	var item = req.body;
-	item = scheduleHandler.addScheduleItem(item);
+	item = scheduleModule.addScheduleItem(item);
 	res.send(item);
 });
 
 //Update
 router.post('/', jsonParser, function (req, res, next){
 	var item = req.body;
-	scheduleHandler.updateScheduleItem(item);
+	scheduleModule.updateScheduleItem(item);
 	res.send({status: "Updated"});
 });
 

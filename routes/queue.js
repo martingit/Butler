@@ -1,16 +1,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-var scheduleHandler = require('../handlers/schedule');
+var scheduleModule = require('../modules/schedule');
 var router = express.Router();
 
 router.get('/', function (req,res){
-	res.send(scheduleHandler.getQueueList());
+	res.send(scheduleModule.getQueueList());
 });
 
 router.get('/reload', function (req, res, next){
-	scheduleHandler.generateQueue();
-	res.send(scheduleHandler.getQueueList());
+	scheduleModule.generateQueue();
+	res.send(scheduleModule.getQueueList());
 });
 
 module.exports = router;

@@ -1,6 +1,6 @@
 var fs = require('fs');
-(function() {
-	var settings = {
+module.exports = {
+	settings: {
 		httpServerPort: 3000,
 		isPasswordProtected: false,
 		isSecureServer: false,
@@ -8,20 +8,20 @@ var fs = require('fs');
 		userPassword: "",
 		longitude: null,
 		latitude: null,
-	};
-	function load(){
+	},
+	load: function(){
 	  try {
 		var data = fs.readFileSync('./settings.json');
-	    settings = JSON.parse(data);
+	    module.exports.settings = JSON.parse(data);
 	  }
 	  catch (err) {
 	    console.log('There has been an error parsing your JSON.')
 	    console.log(err);
 	  }
-	}
-	function save(newSettings){
-		settings = newSettings;
-		var data = JSON.stringify(settings);
+	},
+	save: function(newSettings){
+		module.exports.settings = newSettings;
+		var data = JSON.stringify(module.exports.settings);
 		fs.writeFile('./settings.json', data, function (err) {
 	    if (err) {
 	      console.log('There has been an error saving your configuration data.');
@@ -30,22 +30,8 @@ var fs = require('fs');
 	    }
 	    console.log('Configuration saved successfully.')
 	  });
+	},
+	get: function(){
+		return module.exports.settings;
 	}
-	function get(){
-		return settings;
-	}
-
-	var settingsHandler = {
-		load: load,
-		save: save,
-		get: get,
-	};
-
-	if (typeof(module) != 'undefined' && module.exports) {
-    	// Publish as node.js module
-    	load();
-    	console.log('exports settingsHandler');
-    	module.exports = settingsHandler;
-	}
-	
-}).call(this);
+};
