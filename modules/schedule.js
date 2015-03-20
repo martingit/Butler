@@ -67,7 +67,6 @@ function nameThenWhenComare(a,b){
 module.exports = {
 	scheduleList: [],
 	queueList: [],
-	timeline: [],
 	generateQueue: function() {
 		var now = new Date();
 		console.log(now + ' generating queue')
@@ -128,7 +127,6 @@ module.exports = {
         		}
         	}
     	}
-    	module.exports.generateTimeline();
     	module.exports.queueList = list.sort(whenCompare);
 	},
 	generateTimeline: function(){
@@ -173,7 +171,7 @@ module.exports = {
 				timelineItem.end = maxDate;
 			}
 		};
-		module.exports.timeline = {items: list};
+		return list;
 	},
 	addScheduleItem: function (item){
 		item.id = uuid.v4();
@@ -277,7 +275,7 @@ module.exports = {
 		return {items: module.exports.scheduleList};
 	},
 	getTimeline: function(){
-		return module.exports.timeline;
+		return {items: module.exports.generateTimeline()};
 	},
 
 };
