@@ -2,6 +2,8 @@ var express = require('express');
 var https = require('https');
 var pem = require('pem');
 var auth = require('basic-auth');
+var shelljs = require('shelljs');
+
 var deviceRoute = require('./routes/device');
 var settingsRoute = require('./routes/settings');
 var scheduleRoute = require('./routes/schedule');
@@ -52,6 +54,14 @@ app.use('/settings', settingsRoute);
 app.use('/schedule', scheduleRoute);
 app.use('/queue', queueRoute);
 
+
+app.post('/settings/hook', function(req, res){
+  console.log('github webhook. updating local environment.')
+  res.send('thank you');
+  setTimeout(restart, 30);
+});
+
+
 app.disable('etag');
 
 var server;
@@ -61,7 +71,10 @@ app.put('/settings/restart', function(req,res,next){
   startServer();
   res.send({status: "Restarting server;"});
 });
-
+function restart(){
+  shelljs.exec('git pull');
+  shelljs.exec('sh ./restart.sh');
+}
 function startServer(){
   console.log('starting. v1.0');
   deviceModule.refreshDevices();
