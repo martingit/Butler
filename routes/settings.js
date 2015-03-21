@@ -19,6 +19,7 @@ router.post('/', jsonParser, function(req,res,next){
 });
 
 router.get('/hook', function(req,res){
+	console.log('received webhook. updating local envifonment')
 	res.send('thank you');
 	setTimeout(restart, 30);
 });

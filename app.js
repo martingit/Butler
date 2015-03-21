@@ -63,6 +63,7 @@ app.put('/settings/restart', function(req,res,next){
 });
 
 function startServer(){
+  console.log('starting. v1.0');
   deviceModule.refreshDevices();
   scheduleModule.loadSchedule();
   scheduleModule.generateQueue();
