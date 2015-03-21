@@ -14,7 +14,8 @@
     "suncalc": "~1.6.0",
     "telldus": "0.0.9",
     "shelljs": "~0.4.0",
-    "ip": "~0.3.2"
+    "ip": "~0.3.2",
+    "netmask": "~1.0.5"
   },
   "devDependencies": {},
   "scripts": {

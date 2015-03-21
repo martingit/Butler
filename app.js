@@ -5,6 +5,9 @@ var auth = require('basic-auth');
 var shelljs = require('shelljs');
 var ip = require('ip');
 
+var Netmask = require('netmask').Netmask
+var githubBlock = new Netmask('192.30.252.0/22');
+
 var deviceRoute = require('./routes/device');
 var settingsRoute = require('./routes/settings');
 var scheduleRoute = require('./routes/schedule');
@@ -28,6 +31,9 @@ settingsModule.load();
 app.use(function(req, res, next) {
   var settings = settingsModule.settings;
   var isPrivate = ip.isPrivate(req.connection.remoteAddress);
+  if (!isPrivate && githubBlock.contains(req.connection.remoteAddress)){
+    isPrivate = true;
+  }
   if (settings.isPasswordProtected && !isPrivate && settings.userName && settings.userPassword){
     var credentials = auth(req)
 
