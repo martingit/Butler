@@ -71,12 +71,13 @@ app.put('/settings/restart', function(req,res,next){
   startServer();
   res.send({status: "Restarting server;"});
 });
-function restart(){
+function restart() {
   shelljs.exec('git pull');
+  shelljs.exec('npm install');
   shelljs.exec('sh ./restart.sh');
 }
 function startServer(){
-  console.log('starting. v1.0');
+  console.log('starting. v1.1');
   deviceModule.refreshDevices();
   scheduleModule.loadSchedule();
   scheduleModule.generateQueue();
