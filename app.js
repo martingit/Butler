@@ -3,6 +3,7 @@ var https = require('https');
 var pem = require('pem');
 var auth = require('basic-auth');
 var shelljs = require('shelljs');
+var ip = require('ip');
 
 var deviceRoute = require('./routes/device');
 var settingsRoute = require('./routes/settings');
@@ -26,9 +27,8 @@ settingsModule.load();
 
 app.use(function(req, res, next) {
   var settings = settingsModule.settings;
-  var host = req.headers.host;
-  var hostName = host.substring(0, host.indexOf(':'));
-  if (settings.isPasswordProtected && hostName != '127.0.0.1' && hostName != 'localhost' && settings.userName && settings.userPassword){
+  var isPrivate = ip.isPrivate(req.connection.remoteAddress);
+  if (settings.isPasswordProtected && !isPrivate && settings.userName && settings.userPassword){
     var credentials = auth(req)
 
     if (!credentials || credentials.name !== settings.userName || credentials.pass !== settings.userPassword) {
