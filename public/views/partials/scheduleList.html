@@ -1,1 +1,126 @@
-<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><i class="glyphicon glyphicon-list-alt"></i> Events <small ng-hide="schedules != undefined"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> Loading...</small></h3></div><div class="table-responsive" ng-show="schedules != undefined"><table class="table table-condensed schedule"><thead><tr><th>#</th><th>Enabled</th><th>Device</th><th>When</th><th>Time</th><th>Action</th><th>Days</th><th></th><tbody><tr ng-repeat="item in schedules" ng-class="{ 'info': item.dirty }"><td title="{{item.id}}">{{$index+1}}</td><td><input type="checkbox" ng-model="item.enabled" name="enabled" ng-change="item.dirty = true"></td><td><select ng-options="device.id as device.name for device in devices" ng-model="item.deviceId" ng-change="item.dirty = true"></select></td><td><select ng-options="type.value as type.name for type in timeTypes" ng-model="item.timeTypeId" ng-change="item.dirty = true"></select></td><td><input type="time" placeholder="hh:mm" ng-model="item.time" required name="time" ng-change="item.dirty = true"></td><td><select ng-options="action.value as action.name for action in actions" ng-model="item.action" ng-change="item.dirty = true"></select></td><td><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.monday }"><input type="checkbox" ng-model="item.monday" ng-change="item.dirty = true">M</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.tuesday }"><input type="checkbox" ng-model="item.tuesday" ng-change="item.dirty = true">T</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.wednesday }"><input type="checkbox" ng-model="item.wednesday" ng-change="item.dirty = true">W</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.thursday }"><input type="checkbox" ng-model="item.thursday" ng-change="item.dirty = true">T</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.friday }"><input type="checkbox" ng-model="item.friday" ng-change="item.dirty = true">F</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.saturday }"><input type="checkbox" ng-model="item.saturday" ng-change="item.dirty = true">S</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.sunday }"><input type="checkbox" ng-model="item.sunday" ng-change="item.dirty = true">S</label></td><td><button type="button" class="btn btn-default btn-xs" ng-click="update(item.id)"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button> <button type="button" class="btn btn-default btn-xs" ng-click="delete(item.id)"><i class="glyphicon glyphicon-trash"></i> Delete</button></td><tfoot><tr class="active"><td colspan="8"><span class="help-block">Use input below to add new event</span></td><tr><td><i class="glyphicon glyphicon-asterisk"></i></td><td><input type="checkbox" ng-model="newSchedule.enabled"></td><td><select ng-options="device.id as device.name for device in devices" ng-model="newSchedule.deviceId"><option value="">---</select></td><td><select ng-options="type.value as type.name for type in timeTypes" ng-model="newSchedule.timeTypeId" ng-change="item.dirty = true"></select></td><td><input type="time" placeholder="hh:mm" ng-model="newSchedule.time"></td><td><select ng-options="action.value as action.name for action in actions" ng-model="newSchedule.action" ng-change="item.dirty = true"></select></td><td><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.monday    }"><input type="checkbox" ng-model="newSchedule.monday">M</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.tuesday   }"><input type="checkbox" ng-model="newSchedule.tuesday">T</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.wednesday }"><input type="checkbox" ng-model="newSchedule.wednesday">W</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.thursday  }"><input type="checkbox" ng-model="newSchedule.thursday">T</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.friday    }"><input type="checkbox" ng-model="newSchedule.friday">F</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.saturday  }"><input type="checkbox" ng-model="newSchedule.saturday">S</label><label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.sunday    }"><input type="checkbox" ng-model="newSchedule.sunday">S</label></td><td><button type="button" class="btn btn-default btn-xs" ng-click="add()"><i class="glyphicon glyphicon-plus"></i> Add</button></td><tr><td colspan="8"><span class="help-block">For reccuring events select which days events to occur on.<br>Time is used as hour and minute offset when selecting sunrise/sunset +/-, otherwise its used as time stamp (actual time).<br>Single events (non-reoccuring) are disabled as soon as they are triggered.</span></td></table></div><div class="panel-footer"><div class="btn-group" role="toolbar"><button type="button" class="btn btn-default btn-sm" ng-click="saveAll()"><i class="glyphicon glyphicon-floppy-disk"></i> Save all</button> <button type="button" class="btn btn-default btn-sm" ng-click="reloadSchedule(true)"><i class="glyphicon glyphicon-repeat"></i> Reload</button></div></div></div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="glyphicon glyphicon-list-alt"></i> Events
+      <small ng-hide="schedules != undefined"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> Loading...</small>
+    </h3>
+  </div>
+  <div class="table-responsive" ng-show="schedules != undefined">
+    <table class="table table-condensed schedule">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Enabled</th>
+          <th>Device</th>
+          <th>When</th>
+          <th>Time</th>
+          <th>Action</th>
+          <th>Days</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in schedules" ng-class="{ 'info': item.dirty }">
+          <td title="{{item.id}}">{{$index+1}}</td>
+          <td>
+            <input type="checkbox" ng-model="item.enabled" name="enabled" ng-change="item.dirty = true" />
+          </td>
+          <td>
+            <select ng-options="device.id as device.name for device in devices" ng-model="item.deviceId" ng-change="item.dirty = true"></select>
+          </td>
+          <td>
+            <select ng-options="type.value as type.name for type in timeTypes" ng-model="item.timeTypeId" ng-change="item.dirty = true"></select>
+          </td>
+          <td>
+            <input type="time" placeholder="hh:mm" ng-model="item.time" required name="time" ng-change="item.dirty = true" />
+          </td>
+          <td>
+            <select ng-options="action.value as action.name for action in actions" ng-model="item.action" ng-change="item.dirty = true"></select>
+          </td>
+          <td>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.monday }">
+              <input type="checkbox" ng-model="item.monday" ng-change="item.dirty = true" />M</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.tuesday }">
+              <input type="checkbox" ng-model="item.tuesday" ng-change="item.dirty = true" />T</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.wednesday }">
+              <input type="checkbox" ng-model="item.wednesday" ng-change="item.dirty = true" />W</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.thursday }">
+              <input type="checkbox" ng-model="item.thursday" ng-change="item.dirty = true" />T</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.friday }">
+              <input type="checkbox" ng-model="item.friday" ng-change="item.dirty = true" />F</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.saturday }">
+              <input type="checkbox" ng-model="item.saturday" ng-change="item.dirty = true" />S</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : item.sunday }">
+              <input type="checkbox" ng-model="item.sunday" ng-change="item.dirty = true" />S</label>
+          </td>
+          <td>
+            <button type="button" class="btn btn-default btn-xs" ng-click="update(item.id)"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button>
+            <button type="button" class="btn btn-default btn-xs" ng-click="delete(item.id)"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr class="active">
+          <td colspan="8">
+            <span class="help-block">Use input below to add new event</span>
+          </td>
+        </tr>
+        <tr>
+          <td><i class="glyphicon glyphicon-asterisk"></i>
+          </td>
+          <td>
+            <input type="checkbox" ng-model="newSchedule.enabled" />
+          </td>
+          <td>
+            <select ng-options="device.id as device.name for device in devices" ng-model="newSchedule.deviceId">
+              <option value="">---</option>
+            </select>
+          </td>
+          <td>
+            <select ng-options="type.value as type.name for type in timeTypes" ng-model="newSchedule.timeTypeId" ng-change="item.dirty = true"></select>
+          </td>
+          <td>
+            <input type="time" placeholder="hh:mm" ng-model="newSchedule.time" />
+          </td>
+          <td>
+            <select ng-options="action.value as action.name for action in actions" ng-model="newSchedule.action" ng-change="item.dirty = true"></select>
+          </td>
+          <td>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.monday    }">
+              <input type="checkbox" ng-model="newSchedule.monday" />M</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.tuesday   }">
+              <input type="checkbox" ng-model="newSchedule.tuesday" />T</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.wednesday }">
+              <input type="checkbox" ng-model="newSchedule.wednesday" />W</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.thursday  }">
+              <input type="checkbox" ng-model="newSchedule.thursday" />T</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.friday    }">
+              <input type="checkbox" ng-model="newSchedule.friday" />F</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.saturday  }">
+              <input type="checkbox" ng-model="newSchedule.saturday" />S</label>
+            <label class="checkbox-inline" ng-class="{ 'checked bg-primary' : newSchedule.sunday    }">
+              <input type="checkbox" ng-model="newSchedule.sunday" />S</label>
+          </td>
+          <td>
+            <button type="button" class="btn btn-default btn-xs" ng-click="add()"><i class="glyphicon glyphicon-plus"></i> Add</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8">
+            <span class="help-block">
+            For reccuring events select which days events to occur on.<br/>
+            Time is used as hour and minute offset when selecting sunrise/sunset +/-, otherwise its used as time stamp (actual time).<br/>
+            Single events (non-reoccuring) are disabled as soon as they are triggered.
+          </span>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="panel-footer">
+    <div class="btn-group" role="toolbar">
+      <button type="button" class="btn btn-default btn-sm" ng-click="saveAll()"><i class="glyphicon glyphicon-floppy-disk"></i> Save all</button>
+      <button type="button" class="btn btn-default btn-sm" ng-click="reloadSchedule(true)"><i class="glyphicon glyphicon-repeat"></i> Reload</button>
+    </div>
+  </div>
+</div>

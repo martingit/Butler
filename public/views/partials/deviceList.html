@@ -1,1 +1,46 @@
-<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><i class="glyphicon glyphicon-list-alt"></i> Devices <small ng-hide="devices != undefined"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> Loading...</small></h3></div><table class="table" ng-show="devices != undefined"><thead><tr><th>#</th><th>Device name</th><th>Action</th><th>Level <i class="glyphicon glyphicon-signal"></i></th><th class="hidden-xs">Type</th><tbody><tr ng-repeat="device in devices" ng-class="{'success' : device.status }"><td>{{device.id}}</td><td class="device-name">{{device.name}}</td><td><div class="btn-group btn-group-custom"><button type="button" class="btn btn-xs" ng-class="{ 'btn-default': !device.status, 'btn-success disabled': device.status }" ng-click="changeStatus(device.id, true)">On</button> <button type="button" class="btn btn-xs" ng-class="{ 'btn-default': device.status, 'btn-danger disabled': !device.status }" ng-click="changeStatus(device.id, false)">Off</button></div></td><td><div ng-switch="" on="device.dimmable"><div ng-switch-when="true"><select ng-model="device.level" ng-options="level+'%' for level in dimLevels" ng-change="dimDevice(device.id, device.level)"></select></div></div></td><td class="hidden-xs">{{device.type}}</td></table><div class="panel-footer"><div class="btn-group" role="toolbar"><button type="button" class="btn btn-default btn-sm" ng-click="reloadDevices()"><i class="glyphicon glyphicon-repeat"></i> Reload</button> <button type="button" class="btn btn-default btn-sm" ng-click="turnAllOff()">Turn all off</button> <button type="button" class="btn btn-default btn-sm" ng-click="turnAllOn()">Turn all on</button></div></div></div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="glyphicon glyphicon-list-alt"></i> Devices
+      <small ng-hide="devices != undefined"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> Loading...</small>
+    </h3>
+  </div>
+  <table class="table" ng-show="devices != undefined">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Device name</th>
+        <th>Action</th>
+        <th>Level <i class="glyphicon glyphicon-signal"></i></th>
+        <th class="hidden-xs">Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="device in devices" ng-class="{'success' : device.status }">
+        <td>{{device.id}}</td>
+        <td class="device-name">{{device.name}}</td>
+        <td>
+          <div class="btn-group btn-group-custom">
+            <button type="button" class="btn btn-xs" ng-class="{ 'btn-default': !device.status, 'btn-success disabled': device.status }" ng-click="changeStatus(device.id, true)">On</button>
+            <button type="button" class="btn btn-xs" ng-class="{ 'btn-default': device.status, 'btn-danger disabled': !device.status }" ng-click="changeStatus(device.id, false)">Off</button>
+          </div>
+        </td>
+        <td>
+          <div ng-switch on="device.dimmable">
+            <div ng-switch-when="true">
+              <select ng-model="device.level" ng-options="level+'%' for level in dimLevels" ng-change="dimDevice(device.id, device.level)"></select>
+
+            </div>
+          </div>
+        </td>
+        <td class="hidden-xs">{{device.type}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="panel-footer">
+    <div class="btn-group" role="toolbar">
+      <button type="button" class="btn btn-default btn-sm" ng-click="reloadDevices()"><i class="glyphicon glyphicon-repeat"></i> Reload</button>
+      <button type="button" class="btn btn-default btn-sm" ng-click="turnAllOff()">Turn all off</button>
+      <button type="button" class="btn btn-default btn-sm" ng-click="turnAllOn()">Turn all on</button>
+    </div>
+  </div>
+</div>

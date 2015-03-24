@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var telldus = require('telldus');
 var bodyParser = require('body-parser');
@@ -41,9 +42,10 @@ router.put('/', jsonParser, function (req, res){
 	var device = deviceHandler.updateDeviceStatus(req.body.deviceId, null, req.body.level);
 	res.send(device);
 });
-router.route('/reload').get(function (req, res) {
+router.get('/reload', function (req, res) {
 	deviceHandler.refreshDevices();
 	res.send({"devices": deviceHandler.getDevices()});
 });
+
 
 module.exports = router;

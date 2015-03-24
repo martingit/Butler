@@ -3,6 +3,7 @@ var settingsModule = require('./settings');
 var utils = require('../utils');
 var uuid = require('node-uuid');
 var suncalc = require('suncalc');
+var sockets = require('./sockets');
 
 var fs = require('fs');
 
@@ -128,6 +129,10 @@ module.exports = {
         	}
     	}
     	module.exports.queueList = list.sort(whenCompare);
+    	var io = sockets.get();
+    	if (io && io.sockets){
+    		io.sockets.emit('update:queue', module.exports.queueList);
+    	}
 	},
 	generateTimeline: function(){
 		var queue = module.exports.queueList.sort(nameThenWhenComare);

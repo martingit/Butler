@@ -1,0 +1,126 @@
+body > .container {
+  margin-top: 65px;
+}
+.navbar > .navbar {
+  background: #fff;
+  border-bottom: 1px solid #dfdfdf;
+}
+.navbar-brand > img {
+  margin-top: -5px;
+}
+footer {
+  border-top: 1px solid #dfdfdf;
+}
+footer p {
+  margin-top: 10px;
+}
+.icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  background-size: 100%;
+}
+.icon.light-off {
+  background-image: url('/images/light-bulb-2-64x64.png');
+}
+.icon.light-on {
+  background-image: url('/images/light-bulb-3-64x64.png');
+}
+/*.table tfoot {
+  border-top: 3px solid #aaa;
+}*/
+
+.alerts {
+  margin-top: 10px;
+}
+.animate {
+  opacity: 0.9;
+}
+.animate.ng-enter,
+.animate.ng-leave {
+  -webkit-transition: 0.3s linear all;
+  /* Safari/Chrome */
+  -moz-transition: 0.3s linear all;
+  /* Firefox */
+  -ms-transition: 0.3s linear all;
+  /* IE10 */
+  -o-transition: 0.3s linear all;
+  /* Opera */
+  transition: 0.3s linear all;
+  /* Future Browsers */
+}
+.animate.ng-enter {
+  opacity: 0;
+}
+.animate.ng-enter-active {
+  /* The animation code itself */
+  opacity: 0.9;
+}
+.animate.ng-leave {
+  opacity: 0.9;
+}
+.animate.ng-leave-active {
+  /* The animation code itself */
+  opacity: 0;
+}
+.btn-group-custom {
+  width: 56px;
+}
+.schedule input[type='time'] {
+  max-width: 80px;
+}
+.schedule .checkbox-inline + .checkbox-inline {
+  margin: 0 2px 0 0;
+}
+.schedule .checkbox-inline {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 2px 0 0 0;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  font-size: 10px;
+  margin: 0 2px 0 0;
+  color: #CCC;
+}
+.schedule .checkbox-inline input[type='checkbox'] {
+  display: none;
+}
+.schedule .checkbox-inline.checked {
+  border: 1px solid black;
+  color: #fff;
+}
+.panel-footer {
+  text-align: right;
+}
+.device-name {} 
+@media (max-width: 767px) {
+  .device-name {
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+.glyphicon-refresh-animate {
+  -webkit-animation: spin .5s linear infinite;
+  -moz-animation: spin .5s linear infinite;
+  animation: spin .5s linear infinite;
+}
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: scale(1) rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: scale(1) rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: scale(1) rotate(360deg);
+    transform: scale(1) rotate(360deg);
+  }
+}

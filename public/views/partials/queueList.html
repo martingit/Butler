@@ -1,1 +1,57 @@
-<div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><i class="glyphicon glyphicon-list-alt"></i> Queue <small>Next 24h</small> <small ng-hide="queues != undefined"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> Loading...</small></h3></div><table class="table table-striped table-hover table-condensed" ng-show="queues != undefined"><thead ng-hide="queues.length === 0"><tr><th>When</th><th>Device</th><th>Action</th><th>Recurring</th><tbody><tr ng-repeat="queue in queues"><td>{{queue.when | date:'yyyy-MM-dd HH:mm'}}</td><td>{{queue.deviceName}}</td><td><div ng-switch="" on="queue.action"><div ng-switch-when="true"><i class="icon light-on"></i></div><div ng-switch-when="false"><i class="icon light-off"></i></div></div></td><td><div ng-switch="" on="queue.isRecurring"><div ng-switch-when="true"><i class="glyphicon glyphicon-ok"></i></div><div ng-switch-when="false"><i class="glyphicon glyphicon-remove"></i></div></div></td><tfoot ng-show="queues.length === 0"><tr><td colspan="4"><small>Queue is empty</small></td></table><div class="panel-body" ng-hide="queues.length == 0"><h5><i class="glyphicon glyphicon-time"></i> Timeline</h5></div><div id="timelineChart"></div><div class="panel-footer"><div class="btn-group" role="toolbar"><button type="button" class="btn btn-default btn-sm" ng-click="reloadQueues()"><i class="glyphicon glyphicon-repeat"></i> Reload</button></div></div></div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="glyphicon glyphicon-list-alt"></i> Queue <small>Next 24h</small>
+      <small ng-hide="queues != undefined"><i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i> Loading...</small>
+    </h3>
+  </div>
+  <table class="table table-striped table-hover table-condensed" ng-show="queues != undefined">
+    <thead ng-hide="queues.length === 0">
+      <tr>
+        <th>When</th>
+        <th>Device</th>
+        <th>Action</th>
+        <th>Recurring</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="queue in queues">
+        <td>{{queue.when | date:'yyyy-MM-dd HH:mm'}}</td>
+        <td>{{queue.deviceName}}</td>
+        <td>
+          <div ng-switch on="queue.action">
+            <div ng-switch-when="true">
+              <i class="icon light-on"></i>
+            </div>
+            <div ng-switch-when="false">
+              <i class="icon light-off"></i>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div ng-switch on="queue.isRecurring">
+            <div ng-switch-when="true">
+              <i class="glyphicon glyphicon-ok"></i>
+            </div>
+            <div ng-switch-when="false">
+              <i class="glyphicon glyphicon-remove"></i>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot ng-show="queues.length === 0">
+      <tr>
+        <td colspan="4"><small>Queue is empty</small></td>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="panel-body" ng-hide="queues.length == 0">
+    <h5><i class="glyphicon glyphicon-time"></i> Timeline</h5>
+  </div>
+  <div id="timelineChart"></div>
+  <div class="panel-footer">
+    <div class="btn-group" role="toolbar">
+      <button type="button" class="btn btn-default btn-sm" ng-click="reloadQueues()"><i class="glyphicon glyphicon-repeat"></i> Reload</button>
+    </div>
+  </div>
+</div>

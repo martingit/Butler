@@ -1,4 +1,6 @@
 var telldus = require('telldus');
+var sockets = require('./sockets');
+
 var devices = [];
 function nameCompare(a,b) {
 	if (a.name < b.name){
@@ -12,6 +14,10 @@ function nameCompare(a,b) {
 module.exports = {
 	dimDevice: function(deviceId, level){
 		telldus.dim(deviceId, level);
+		var device = module.exports.getDeviceById(deviceId);
+		var io = sockets.get();
+		io.sockets.emit('alert', {type: 'info', msg: 'Dimmed ' + device.name + ' to ' + device.level + '%'});
+		io.sockets.emit('update:device', device);
 	},
 	getDevices: function() {
 		return devices;
@@ -34,11 +40,17 @@ module.exports = {
 		module.exports.updateDevices(deviceList);
 	},
 	switchDevice: function(deviceId, status){
+		//
+		var device = module.exports.getDeviceById(deviceId);
+		var io = sockets.get();
 		if (status){
 			telldus.turnOn(deviceId);
+			io.sockets.emit('alert', {type: 'info', msg: 'Turned on device ' + device.name});
 		} else {
 			telldus.turnOff(deviceId);
+			io.sockets.emit('alert', {type: 'info', msg: 'Turned off device ' + device.name});
 		}
+		io.sockets.emit('update:device', device);
 	},
 	updateDevices: function(list) {
 		devices = [];
