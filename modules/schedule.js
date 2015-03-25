@@ -1,6 +1,6 @@
 var deviceModule = require('./device');
 var settingsModule = require('./settings');
-var utils = require('../utils');
+var utils = require('./utils');
 var uuid = require('node-uuid');
 var suncalc = require('suncalc');
 var sockets = require('./sockets');
