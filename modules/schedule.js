@@ -129,10 +129,7 @@ module.exports = {
         	}
     	}
     	module.exports.queueList = list.sort(whenCompare);
-    	var io = sockets.get();
-    	if (io && io.sockets){
-    		io.sockets.emit('update:queue', module.exports.queueList);
-    	}
+    	sockets.emit('update:queue', module.exports.queueList);
 	},
 	generateTimeline: function(){
 		var queue = module.exports.queueList.sort(nameThenWhenComare);
