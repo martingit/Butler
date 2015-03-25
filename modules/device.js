@@ -26,7 +26,7 @@ module.exports = {
 			if(devices[i].id === deviceId){
 				return devices[i];
 			}
-		};
+		}
 		return null;
 	},
 	getName: function(deviceId){
@@ -80,7 +80,7 @@ module.exports = {
 				}
 				return devices[i];
 			}
-		};
+		}
 		return null;
 	},
 };
