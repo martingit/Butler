@@ -7,65 +7,61 @@
 <!--<![endif]-->
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title ng-bind="title">Butler</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <!-- build:css styles/vendor.css -->
-  <link rel="stylesheet" href="styles/bootstrap.css" />
-  <!-- endbuild -->
-  <!-- build:css({.tmp,app}) styles/main.css -->
-  <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title ng-bind="title">Butler</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <!-- build:css styles/vendor.css -->
+    <link rel="stylesheet" href="styles/bootstrap.css" />
+    <!-- endbuild -->
+    <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
 </head>
 
 <body>
-  <!--[if lt IE 7]>
+    <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-
-  <!-- Add your site or application content here -->
-  <butler-header></butler-header>
-
-  <div class="container">
-    <div ng-view=""></div>
-  </div>
-  <footer>
+    <!-- Add your site or application content here -->
+    <butler-header></butler-header>
     <div class="container">
-      <p class="text-muted">Copyright 2014 and so on</p>
+        <div ng-view=""></div>
     </div>
-  </footer>
-  <!--[if lt IE 9]>
+    <footer>
+        <div class="container">
+            <p class="text-muted">Copyright 2014 and so on</p>
+        </div>
+    </footer>
+    <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
-
-  <script src="//www.google.com/jsapi" type="text/javascript"></script>
-  <script src="scripts/jquery.js"></script>
-  <script src="scripts/bootstrap.js"></script>
-  <script src="scripts/angular.js"></script>
-  <script src="scripts/angular-resource.js"></script>
-  <script src="scripts/angular-cookies.js"></script>
-  <script src="scripts/angular-sanitize.js"></script>
-  <script src="scripts/angular-route.js"></script>
-  <script src="scripts/ui-bootstrap-tpls.js"></script>
-  <script src="scripts/angular-animate.js"></script>
-  <script src="scripts/moment.js"></script>
-  <script src="scripts/socket.io.js"></script>
-
-  <script src="scripts/app.js"></script>
-  <script src="scripts/controllers/main.js"></script>
-  <script src="scripts/controllers/about.js"></script>
-  <script src="scripts/controllers/device.js"></script>
-  <script src="scripts/controllers/header.js"></script>
-  <script src="scripts/controllers/schedule.js"></script>
-  <script src="scripts/controllers/queue.js"></script>
-  <script src="scripts/controllers/settings.js"></script>
+    <script src="//www.google.com/jsapi" type="text/javascript"></script>
+    <script src="scripts/jquery.js"></script>
+    <script src="scripts/bootstrap.js"></script>
+    <script src="scripts/angular.js"></script>
+    <script src="scripts/angular-resource.js"></script>
+    <script src="scripts/angular-cookies.js"></script>
+    <script src="scripts/angular-sanitize.js"></script>
+    <script src="scripts/angular-route.js"></script>
+    <script src="scripts/ui-bootstrap-tpls.js"></script>
+    <script src="scripts/angular-animate.js"></script>
+    <script src="scripts/moment.js"></script>
+    <script src="scripts/socket.io.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/about.js"></script>
+    <script src="scripts/controllers/device.js"></script>
+    <script src="scripts/controllers/header.js"></script>
+    <script src="scripts/controllers/schedule.js"></script>
+    <script src="scripts/controllers/queue.js"></script>
+    <script src="scripts/controllers/settings.js"></script>
 </body>
 
 </html>

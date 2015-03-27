@@ -1,91 +1,89 @@
 <form class="form-horizontal" role="form" autocomplete="off">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title"><i class="glyphicon glyphicon-cog"></i> Settings</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-cog"></i> Settings</h3>
+        </div>
+        <div class="panel-body">
+            <span class="help-block">Here you can edit some settings for Butler; like which port to expose web interface at, password protection or using https. <br/> Location services is only used to calculate sunrise/sunset and is not sent anywhere.</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h5><i class="glyphicon glyphicon-globe"></i> Http server</h5>
+                <div class="form-group">
+                    <label for="httpServerPort" class="col-sm-2 control-label">Port</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="httpServerPort" ng-model="settings.httpServerPort" placeholder="Port">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="settings.isPasswordProtected">Is Password Protected (when not connecting from localhost)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="settings.isSecureServer">Use SSL/TSL
+                                <span class="help-block">Autogenerates a self-signed certificate</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username" placeholder="Username" ng-model="settings.userName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password" placeholder="Password" ng-model="settings.userPassword">
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h5><i class="glyphicon glyphicon-map-marker"></i> Location</h5>
+                <div class="form-group">
+                    <label for="longitude" class="col-sm-2 control-label">Longitude</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="longitude" placeholder="Longitude" ng-model="settings.longitude">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="latitude" class="col-sm-2 control-label">Latitude</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="latitude" placeholder="Latitude" ng-model="settings.latitude">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-4">
+                        <button type="button" class="btn btn-default form-control" ng-click="getUserLocation()"><i class="glyphicon glyphicon-map-marker"></i> Get your location</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address" class="col-sm-2 control-label">Address*</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="address" placeholder="Street name number and city" ng-model="address" ng-enter="getGeolocationFromAddress()">
+                        <span class="help-block">Type an street address and get the geolocation using google maps api. (ie Street Name 11 City)<br/>*The address will not be saved, only longitude and latitude.</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-primary form-control" ng-click="getGeolocationFromAddress()" ng-disabled="address.length===0"><i class="glyphicon glyphicon-cloud"></i> Get location</button>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item" style="text-align: right;">
+                <div class="btn-group" role="toolbar">
+                    <button type="button" class="btn btn-default btn-sm" ng-click="saveSettings()"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="reloadSettings()"><i class="glyphicon glyphicon-repeat"></i> Reload</button>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="restartServer()"><i class="glyphicon glyphicon-globe"></i> Restart</button>
+                </div>
+            </li>
+        </ul>
     </div>
-    <div class="panel-body">
-      <span class="help-block">Here you can edit some settings for Butler; like which port to expose web interface at, password protection or using https. <br/> Location services is only used to calculate sunrise/sunset and is not sent anywhere.</span>
-    </div>
-    <ul class="list-group">
-      <li class="list-group-item">
-        <h5><i class="glyphicon glyphicon-globe"></i> Http server</h5>
-        <div class="form-group">
-          <label for="httpServerPort" class="col-sm-2 control-label">Port</label>
-          <div class="col-sm-10">
-            <input type="number" class="form-control" id="httpServerPort" ng-model="settings.httpServerPort" placeholder="Port">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="settings.isPasswordProtected">Is Password Protected (when not connecting from localhost)
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" ng-model="settings.isSecureServer">Use SSL/TSL
-                <span class="help-block">Autogenerates a self-signed certificate</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="username" class="col-sm-2 control-label">Username</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="username" placeholder="Username" ng-model="settings.userName">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="password" class="col-sm-2 control-label">Password</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" id="password" placeholder="Password" ng-model="settings.userPassword">
-          </div>
-        </div>
-      </li>
-      <li class="list-group-item">
-        <h5><i class="glyphicon glyphicon-map-marker"></i> Location</h5>
-        <div class="form-group">
-          <label for="longitude" class="col-sm-2 control-label">Longitude</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="longitude" placeholder="Longitude" ng-model="settings.longitude">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="latitude" class="col-sm-2 control-label">Latitude</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="latitude" placeholder="Latitude" ng-model="settings.latitude">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-4">
-            <button type="button" class="btn btn-default form-control" ng-click="getUserLocation()"><i class="glyphicon glyphicon-map-marker"></i> Get your location</button>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="address" class="col-sm-2 control-label">Address*</label>
-          <div class="col-sm-7">
-            <input type="text" class="form-control" id="address" placeholder="Street name number and city" ng-model="address" ng-enter="getGeolocationFromAddress()">
-            <span class="help-block">Type an street address and get the geolocation using google maps api. (ie Street Name 11 City)<br/>*The address will not be saved, only longitude and latitude.</span>
-          </div>
-          <div class="col-sm-3">
-            <button type="button" class="btn btn-primary form-control" ng-click="getGeolocationFromAddress()" ng-disabled="address.length===0"><i class="glyphicon glyphicon-cloud"></i> Get location</button>
-          </div>
-        </div>
-      </li>
-      <li class="list-group-item" style="text-align: right;">
-        <div class="btn-group" role="toolbar">
-          <button type="button" class="btn btn-default btn-sm" ng-click="saveSettings()"><i class="glyphicon glyphicon-floppy-disk"></i> Save</button>
-          <button type="button" class="btn btn-default btn-sm" ng-click="reloadSettings()"><i class="glyphicon glyphicon-repeat"></i> Reload</button>
-          <button type="button" class="btn btn-default btn-sm" ng-click="restartServer()"><i class="glyphicon glyphicon-globe"></i> Restart</button>
-        </div>
-      </li>
-    </ul>
-  </div>
 </form>

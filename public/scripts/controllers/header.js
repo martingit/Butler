@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('butlerApp')
-  .controller('HeaderCtrl', function($scope, $location) {
+  .controller('HeaderCtrl', function ($scope, $location) {
     $scope.nodes = [{
       name: 'Home',
       url: '/',
@@ -19,11 +19,11 @@ angular.module('butlerApp')
       url: '/about',
       icon: 'glyphicon glyphicon-heart-empty'
     }, ];
-    $scope.isActive = function(viewLocation) {
+    $scope.isActive = function (viewLocation) {
       return viewLocation === $location.path();
     };
   })
-  .directive('butlerHeader', function() {
+  .directive('butlerHeader', function () {
     return {
       restrict: 'E',
       templateUrl: 'views/partials/header.html',

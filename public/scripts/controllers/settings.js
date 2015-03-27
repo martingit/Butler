@@ -1,30 +1,30 @@
 'use strict';
 
 angular.module('butlerApp')
-  .controller('SettingsCtrl', function($scope, $http, $log, $timeout, $window, AppAlert) {
+  .controller('SettingsCtrl', function ($scope, $http, $log, $timeout, $window, AppAlert) {
 
     $scope.address = '';
 
-    var getSettings = function() {
+    var getSettings = function () {
       $http.get('/settings/')
-        .success(function(response) {
+        .success(function (response) {
           $scope.settings = response;
-        }).error(function(response) {
+        }).error(function (response) {
           $log.error(response);
         });
     };
 
-    $scope.getUserLocation = function() {
+    $scope.getUserLocation = function () {
       $log.info('get user location');
       if (navigator.geolocation) {
         $log.info('user location available')
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           $log.info(position.coords);
           $scope.settings.longitude = position.coords.longitude;
           $scope.settings.latitude = position.coords.latitude;
           AppAlert.add('info', 'Geolocation retrieved from browser!', 2000);
           $scope.$apply();
-        }, function(error) {
+        }, function (error) {
           switch (error.code) {
             case error.PERMISSION_DENIED:
               AppAlert.add('danger', 'User denied the request for Geolocation.', 3000);
@@ -43,55 +43,55 @@ angular.module('butlerApp')
       }
     };
 
-    $scope.saveSettings = function() {
+    $scope.saveSettings = function () {
       $log.info('saving settings');
-      $http.post('/settings', $scope.settings).success(function(response) {
-        AppAlert.add('success', 'Settings saved successfully!', 2000);
-        $log.info(response);
-      })
-        .error(function(response) {
+      $http.post('/settings', $scope.settings).success(function (response) {
+          AppAlert.add('success', 'Settings saved successfully!', 2000);
+          $log.info(response);
+        })
+        .error(function (response) {
           $log.error(response);
           AppAlert.add('danger', response);
         });
     };
 
-    $scope.reloadSettings = function() {
+    $scope.reloadSettings = function () {
       getSettings();
       $scope.$apply();
     };
 
-    $scope.getGeolocationFromAddress = function() {
+    $scope.getGeolocationFromAddress = function () {
       if ($scope.address.length === 0) {
         return;
       }
       var address = $scope.address;
       $log.info(address);
       var url = 'http://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&sensor=false';
-      $http.get(url).success(function(response) {
-        if (response.status === 'OK' && response.results.length > 0) {
-          $scope.settings.longitude = response.results[0].geometry.location.lng;
-          $scope.settings.latitude = response.results[0].geometry.location.lat;
-          $scope.address = response.results[0].formatted_address;
-        }
-      })
-        .error(function(response) {
+      $http.get(url).success(function (response) {
+          if (response.status === 'OK' && response.results.length > 0) {
+            $scope.settings.longitude = response.results[0].geometry.location.lng;
+            $scope.settings.latitude = response.results[0].geometry.location.lat;
+            $scope.address = response.results[0].formatted_address;
+          }
+        })
+        .error(function (response) {
           $log.error(response);
           AppAlert.add('danger', response);
         });
     };
-    $scope.restartServer = function() {
+    $scope.restartServer = function () {
       var msg = 'Restart http server on port ' + $scope.settings.httpServerPort;
       $log.info(msg);
       AppAlert.add('warning', msg, 5000);
       var protocol = $scope.settings.isSecureServer ? 'https:' : 'http:';
       var newUrl = protocol + '//' + $window.location.hostname + ':' + $scope.settings.httpServerPort + '/';
-      $http.put('/settings/restart').success(function(response) {
-        $log.info(response);
-        $timeout(function() {
-          $window.location = newUrl;
-        }, 2000, false);
-      })
-        .error(function(response) {
+      $http.put('/settings/restart').success(function (response) {
+          $log.info(response);
+          $timeout(function () {
+            $window.location = newUrl;
+          }, 2000, false);
+        })
+        .error(function (response) {
           $log.error(response);
         });
     };

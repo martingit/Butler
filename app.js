@@ -8,7 +8,7 @@ var ip = require('ip');
 var io = require('socket.io');
 var sockets = require('./modules/sockets');
 
-var Netmask = require('netmask').Netmask
+var Netmask = require('netmask').Netmask;
 var githubBlock = new Netmask('192.30.252.0/22');
 
 var deviceRoute = require('./routes/device');
@@ -25,7 +25,7 @@ var workerQueue = [];
 
 var app = express();
 module.exports = {
-  getSocket: function(){
+  getSocket: function () {
     return socketio;
   }
 };
@@ -37,15 +37,15 @@ var timerModule = require('./modules/timer');
 
 
 settingsModule.load();
-  
 
-app.use(function(req, res, next) {
+
+app.use(function (req, res, next) {
   var settings = settingsModule.settings;
   var isPrivate = ip.isPrivate(req.connection.remoteAddress);
-  if (!isPrivate && githubBlock.contains(req.connection.remoteAddress)){
+  if (!isPrivate && githubBlock.contains(req.connection.remoteAddress)) {
     isPrivate = true;
   }
-  if (settings.isPasswordProtected && !isPrivate && settings.userName && settings.userPassword){
+  if (settings.isPasswordProtected && !isPrivate && settings.userName && settings.userPassword) {
     var credentials = auth(req)
 
     if (!credentials || credentials.name !== settings.userName || credentials.pass !== settings.userPassword) {
@@ -60,7 +60,7 @@ app.use(function(req, res, next) {
   return next();
 });
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   return next();
 });
@@ -72,7 +72,7 @@ app.use('/settings', settingsRoute);
 app.use('/schedule', scheduleRoute);
 app.use('/queue', queueRoute);
 
-app.post('/settings/hook', function(req, res){
+app.post('/settings/hook', function (req, res) {
   console.log('github webhook. updating local environment.')
   res.send('thank you');
   setTimeout(restart, 30);
@@ -81,33 +81,43 @@ app.post('/settings/hook', function(req, res){
 
 app.disable('etag');
 
-app.put('/settings/restart', function(req,res,next){
+app.put('/settings/restart', function (req, res, next) {
   socketio.close();
   server.close();
   startServer();
-  res.send({status: "Restarting server;"});
+  res.send({
+    status: "Restarting server;"
+  });
 });
+
 function restart() {
   shelljs.exec('git pull');
   shelljs.exec('npm install');
   shelljs.exec('sh ./restart.sh');
 }
-function startServer(){
+
+function startServer() {
   console.log('starting. v1.1');
   deviceModule.refreshDevices();
   scheduleModule.loadSchedule();
   scheduleModule.generateQueue();
   var settings = settingsModule.settings;
 
-  if (settings.isSecureServer){
-    pem.createCertificate({days:1000, selfSigned:true}, function(err, keys){  
-      server = https.createServer({key: keys.serviceKey, cert: keys.certificate}, app).listen(settings.httpServerPort);
+  if (settings.isSecureServer) {
+    pem.createCertificate({
+      days: 1000,
+      selfSigned: true
+    }, function (err, keys) {
+      server = https.createServer({
+        key: keys.serviceKey,
+        cert: keys.certificate
+      }, app).listen(settings.httpServerPort);
       var host = server.address().address;
       var port = server.address().port;
       console.log('Listening at https://%s:%s', host, port);
     });
   } else {
-      server = app.listen(settings.httpServerPort, function () {
+    server = app.listen(settings.httpServerPort, function () {
       var host = server.address().address;
       var port = server.address().port;
 
