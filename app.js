@@ -93,7 +93,7 @@ function restart() {
   shelljs.exec('sh ./restart.sh');
 }
 function startServer(){
-  console.log('starting. v1.1');
+  console.log('starting. v1.2');
   deviceModule.refreshDevices();
   scheduleModule.loadSchedule();
   scheduleModule.generateQueue();

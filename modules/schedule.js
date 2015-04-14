@@ -1,3 +1,4 @@
+'use strict';
 var deviceModule = require('./device');
 var settingsModule = require('./settings');
 var utils = require('./utils');
@@ -169,6 +170,9 @@ module.exports = {
 			}
 			if (timelineItem.end === undefined){
 				timelineItem.end = maxDate;
+			}
+			if (timelineItem.start.getTime() == timelineItem.end.getTime()){
+				timelineItem.end = utils.addMinutes(timelineItem.end, 30);
 			}
 		}
 		return list;

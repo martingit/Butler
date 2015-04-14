@@ -1,3 +1,4 @@
+'use strict';
 var telldus = require('telldus');
 var sockets = require('./sockets');
 
