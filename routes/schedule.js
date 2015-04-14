@@ -30,12 +30,12 @@ router.post('/', jsonParser, function (req, res, next){
 
 //Delete
 router.delete('/:id', jsonParser, function (req, res, next){
-	if (typeof(req.params.id) !== "number"){
+	if (req.params.id === undefined || req.params.id.length !== 36){
 		res.status(404);
 		res.send({status: "not found"});
 		return;
 	}
-	scheduleHandler.removeScheduleItem(req.params.id);
+	scheduleModule.removeScheduleItem(req.params.id);
 	res.send({status: "Deleted"});
 });
 
