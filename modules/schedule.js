@@ -1,6 +1,6 @@
 var deviceModule = require('./device');
 var settingsModule = require('./settings');
-var utils = require('../utils');
+var utils = require('./utils');
 var uuid = require('node-uuid');
 var suncalc = require('suncalc');
 var sockets = require('./sockets');
@@ -89,8 +89,6 @@ module.exports = {
         		var minutes = parseInt(item.time.substring(3));
         		var date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
 
-        		//console.log("date: " + date);
-
         		switch (item.timeTypeId){
         			case TimeType.SunrisePlus:
         				date = utils.addHours(getSunrise(), hours);
@@ -129,10 +127,7 @@ module.exports = {
         	}
     	}
     	module.exports.queueList = list.sort(whenCompare);
-    	var io = sockets.get();
-    	if (io && io.sockets){
-    		io.sockets.emit('update:queue', module.exports.queueList);
-    	}
+    	sockets.emit('update:queue', module.exports.queueList);
 	},
 	generateTimeline: function(){
 		var queue = module.exports.queueList.sort(nameThenWhenComare);
@@ -146,15 +141,15 @@ module.exports = {
 				var timelineItem = list[j];
 				if (timelineItem.deviceId === item.deviceId){
 					if (timelineItem.end === undefined && !item.action){
-	                    timelineItem.end = item.when;
-	                    updatedItem = true;
+                    	timelineItem.end = item.when;
+                    	updatedItem = true;
 	                }
 				}
 			}
 			if (!updatedItem) {
 				var timeline = { deviceId: item.deviceId, deviceName: item.deviceName, end: undefined, start: undefined };
 				if (item.action){
-                	timeline.start = item.when;
+					timeline.start = item.when;
 				}	else {
 					timeline.end = item.when;
 				}
@@ -175,7 +170,7 @@ module.exports = {
 			if (timelineItem.end === undefined){
 				timelineItem.end = maxDate;
 			}
-		};
+		}
 		return list;
 	},
 	addScheduleItem: function (item){
@@ -187,31 +182,31 @@ module.exports = {
 	},
 
 	loadSchedule: function(){
-	  try {
-		var data = fs.readFileSync('./schedule.json');
-	    var schedule = JSON.parse(data);
-	    if (schedule.items){
-	    	schedule = schedule.items;
-	    }
-	    module.exports.scheduleList = schedule;
-	  }
-	  catch (err) {
-	    console.log('There has been an error parsing your JSON.')
-	    console.log(err);
-	  }
+		try {
+			var data = fs.readFileSync('./schedule.json');
+			var schedule = JSON.parse(data);
+			if (schedule.items){
+				schedule = schedule.items;
+			}
+			module.exports.scheduleList = schedule;
+		}
+		catch (err) {
+			console.log('There has been an error parsing your JSON.')
+			console.log(err);
+		}
 	},
 
 	saveSchedule: function(){
 		var data = JSON.stringify(module.exports.scheduleList);
 		fs.writeFile('./schedule.json', data, function (err) {
-	    if (err) {
-	      console.log('There has been an error saving your schedule data.');
-	      console.log(err.message);
-	      return;
-	    }
-	    console.log('Schedule saved successfully.')
-	    module.exports.generateQueue();
-	  });
+			if (err) {
+				console.log('There has been an error saving your schedule data.');
+				console.log(err.message);
+				return;
+			}
+			console.log('Schedule saved successfully.')
+			module.exports.generateQueue();
+		});	
 	},
 
 	updateScheduleItem: function(item){
@@ -271,16 +266,15 @@ module.exports = {
 				return;
 			}
 		}
-
 	},
 	getQueueList: function(){
-		return {items: module.exports.queueList};
+		return { items: module.exports.queueList };
 	},
 	getScheduleList: function(){
-		return {items: module.exports.scheduleList};
+		return { items: module.exports.scheduleList };
 	},
 	getTimeline: function(){
-		return {items: module.exports.generateTimeline()};
+		return { items: module.exports.generateTimeline() };
 	},
 
 };

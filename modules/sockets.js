@@ -8,5 +8,10 @@ module.exports = {
 	},
 	get: function(){
 		return socketio;
-	}
+	},
+	emit: function(eventName, data){
+		if (socketio && socketio.sockets){
+			socketio.sockets.emit(eventName, data);
+		}
+	},
 }
