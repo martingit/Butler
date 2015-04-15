@@ -1,7 +1,11 @@
 'use strict';
 
 angular.module('butlerApp')
-  .controller('DeviceCtrl', function($scope, $http, $log, socket, AppAlert) {
+  .controller('DeviceCtrl', function($scope, $filter, $http, $log, socket, AppAlert) {
+    var orderBy = $filter('orderBy');
+    $scope.order = function(predicate, reverse) {
+      $scope.devices = orderBy($scope.devices, predicate, reverse);
+    };
     
     socket.on('update:device', function(response){
       angular.forEach($scope.devices, function(device) {
@@ -18,6 +22,7 @@ angular.module('butlerApp')
     $http.get('/device/')
       .success(function(response) {
         $scope.devices = response.devices;
+        $scope.order('id',false);
       }).error(function(response) {
         $log.error(response);
         AppAlert.add('danger', response, 2000);

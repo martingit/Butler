@@ -7,11 +7,11 @@
   <table class="table" ng-show="devices != undefined">
     <thead>
       <tr>
-        <th>#</th>
-        <th>Device name</th>
+        <th><a href="" ng-click="reverse=!reverse;order('id', reverse)">#</a></th>
+        <th><a href="" ng-click="reverse=!reverse;order('name', reverse)">Device name</a></th>
         <th>Action</th>
         <th>Level <i class="glyphicon glyphicon-signal"></i></th>
-        <th class="hidden-xs">Type</th>
+        <th class="hidden-xs"><a href="" ng-click="reverse=!reverse;order('type', reverse)">Type</a></th>
       </tr>
     </thead>
     <tbody>
