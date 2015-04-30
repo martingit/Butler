@@ -32,14 +32,14 @@ router.post('/', jsonParser, function (req, res, next) {
 });
 
 //Delete
-router.delete('/:id', jsonParser, function (req, res, next){
-	if (req.params.id === undefined || req.params.id.length !== 36){
-		res.status(404);
-		res.send({status: "not found"});
-		return;
-	}
-	scheduleModule.removeScheduleItem(req.params.id);
-	res.send({status: "Deleted"});
+router.delete('/:id', jsonParser, function (req, res, next) {
+  if (req.params.id === undefined || req.params.id.length !== 36) {
+    res.status(404);
+    res.send({ status: "not found" });
+    return;
+  }
+  scheduleModule.removeScheduleItem(req.params.id);
+  res.send({ status: "Deleted" });
 });
 
 module.exports = router;

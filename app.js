@@ -48,7 +48,7 @@ app.use(function (req, res, next) {
   }
   if (settings.isPasswordProtected && !isPrivate && settings.userName && settings.userPassword) {
     var credentials = auth(req);
-    
+
     if (!credentials || credentials.name !== settings.userName || credentials.pass !== settings.userPassword) {
       res.writeHead(401, {
         'WWW-Authenticate': 'Basic realm="buttlejs"'
@@ -96,7 +96,7 @@ function restart() {
   shelljs.exec('npm install');
   shelljs.exec('sh ./restart.sh');
 }
-function startServer(){
+function startServer() {
   console.log('starting. v1.2');
   deviceModule.refreshDevices();
   scheduleModule.loadSchedule();
@@ -108,14 +108,14 @@ function startServer(){
       days: 1000,
       selfSigned: true
     }, function (err, keys) {
-      server = https.createServer({
-        key: keys.serviceKey,
-        cert: keys.certificate
-      }, app).listen(settings.httpServerPort);
-      var host = server.address().address;
-      var port = server.address().port;
-      console.log('Listening at https://%s:%s', host, port);
-    });
+        server = https.createServer({
+          key: keys.serviceKey,
+          cert: keys.certificate
+        }, app).listen(settings.httpServerPort);
+        var host = server.address().address;
+        var port = server.address().port;
+        console.log('Listening at https://%s:%s', host, port);
+      });
   } else {
     server = app.listen(settings.httpServerPort, function () {
       var host = server.address().address;
