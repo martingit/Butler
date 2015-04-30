@@ -1,3 +1,4 @@
+/* global __dirname */
 'use strict';
 var express = require('express');
 var https = require('https');
@@ -46,12 +47,12 @@ app.use(function (req, res, next) {
     isPrivate = true;
   }
   if (settings.isPasswordProtected && !isPrivate && settings.userName && settings.userPassword) {
-    var credentials = auth(req)
-
+    var credentials = auth(req);
+    
     if (!credentials || credentials.name !== settings.userName || credentials.pass !== settings.userPassword) {
       res.writeHead(401, {
         'WWW-Authenticate': 'Basic realm="buttlejs"'
-      })
+      });
       return res.end('OH no you didnt?!');
     } else {
       return next();
@@ -73,7 +74,7 @@ app.use('/schedule', scheduleRoute);
 app.use('/queue', queueRoute);
 
 app.post('/settings/hook', function (req, res) {
-  console.log('github webhook. updating local environment.')
+  console.log('github webhook. updating local environment.');
   res.send('thank you');
   setTimeout(restart, 30);
 });
