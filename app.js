@@ -96,9 +96,8 @@ function restart() {
   shelljs.exec('npm install');
   shelljs.exec('sh ./restart.sh');
 }
-
-function startServer() {
-  console.log('starting. v1.1');
+function startServer(){
+  console.log('starting. v1.2');
   deviceModule.refreshDevices();
   scheduleModule.loadSchedule();
   scheduleModule.generateQueue();

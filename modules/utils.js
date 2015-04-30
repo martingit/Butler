@@ -1,15 +1,20 @@
+'use strict';
 var utils = {
-  addMinutes: function (date, minutes) {
-    date.setMinutes(date.getMinutes() + minutes);
-    return date;
-  },
-  addHours: function (date, hours) {
-    date.setHours(date.getHours() + hours);
-    return date;
-  },
-  addDays: function (date, days) {
-    date.setDate(date.getDate() + days);
-    return date;
-  }
+	addMinutes: function(date, minutes){
+		var newDate = new Date(date.getTime());
+		newDate.setMinutes(date.getMinutes()+minutes);
+	    return newDate;
+	},
+	addHours: function(date, hours){
+		var newDate = new Date(date.getTime());
+		newDate.setHours(date.getHours()+hours);
+	    return newDate;
+	},
+	addDays: function(date, days){
+		var newDate = new Date(date.getTime());
+		newDate.setDate(date.getDate()+days);
+	    return newDate;
+	}
+
 };
 module.exports = utils;

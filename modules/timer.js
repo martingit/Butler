@@ -1,3 +1,4 @@
+'use strict';
 var scheduleModule = require('./schedule');
 var settingsModule = require('./settings');
 var deviceModule = require('./device');

@@ -1,3 +1,4 @@
+'use strict';
 var deviceModule = require('./device');
 var settingsModule = require('./settings');
 var utils = require('./utils');
@@ -126,71 +127,69 @@ module.exports = {
           addToQueue = isValidWeekday;
         }
 
-        if (addToQueue) {
-          list.push(queueItem);
-        }
-      }
-    }
-    module.exports.queueList = list.sort(whenCompare);
-    sockets.emit('update:queue', module.exports.queueList);
-  },
-  generateTimeline: function () {
-    var queue = module.exports.queueList.sort(nameThenWhenComare);
-    var list = [];
-    var minDate = Date.parse('2500-01-01 24:59');
-    var maxDate = Date.parse('1900-01-01 00:00');
-    for (var i = 0; i < queue.length; i++) {
-      var item = queue[i];
-      var updatedItem = false;
-      for (var j = 0; j < list.length; j++) {
-        var timelineItem = list[j];
-        if (timelineItem.deviceId === item.deviceId) {
-          if (timelineItem.end === undefined && !item.action) {
-            timelineItem.end = item.when;
-            updatedItem = true;
-          }
-        }
-      }
-      if (!updatedItem) {
-        var timeline = {
-          deviceId: item.deviceId,
-          deviceName: item.deviceName,
-          end: undefined,
-          start: undefined
-        };
-        if (item.action) {
-          timeline.start = item.when;
-        } else {
-          timeline.end = item.when;
-        }
-        list.push(timeline);
-      }
-      if (minDate > item.when) {
-        minDate = item.when;
-      }
-      if (maxDate < item.when) {
-        maxDate = item.when;
-      }
-    }
-    for (var i = list.length - 1; i >= 0; i--) {
-      var timelineItem = list[i];
-      if (timelineItem.start === undefined) {
-        timelineItem.start = new Date();
-      }
-      if (timelineItem.end === undefined) {
-        timelineItem.end = maxDate;
-      }
-    }
-    return list;
-  },
-  addScheduleItem: function (item) {
-    item.id = uuid.v4();
-    item.dirty = false;
-    module.exports.scheduleList.push(item);
-    module.exports.saveSchedule();
-    return item;
-  },
-
+        		if(addToQueue){
+					list.push(queueItem);
+        		}
+        	}
+    	}
+    	module.exports.queueList = list.sort(whenCompare);
+    	sockets.emit('update:queue', module.exports.queueList);
+	},
+	generateTimeline: function(){
+		var queue = module.exports.queueList.sort(nameThenWhenComare);
+		var list = [];
+		var minDate = Date.parse('2500-01-01 24:59');
+		var maxDate = Date.parse('1900-01-01 00:00');
+		for (var i = 0; i < queue.length; i++){
+			var item = queue[i];
+			var updatedItem = false;
+			for (var j = 0; j < list.length; j++){
+				var timelineItem = list[j];
+				if (timelineItem.deviceId === item.deviceId){
+					if (timelineItem.end === undefined && !item.action){
+                    	timelineItem.end = item.when;
+                    	updatedItem = true;
+	                }
+				}
+			}
+			if (!updatedItem) {
+				var timeline = { deviceId: item.deviceId, deviceName: item.deviceName, end: undefined, start: undefined };
+				if (item.action){
+					timeline.start = item.when;
+				}	else {
+					timeline.end = item.when;
+				}
+				list.push(timeline);
+			}
+			if (minDate > item.when) {
+				minDate = item.when;
+			}
+			if (maxDate < item.when) {
+				maxDate = item.when;
+			}
+		}
+		for (var i = list.length - 1; i >= 0; i--) {
+			var timelineItem = list[i];
+			if (timelineItem.start === undefined){
+				timelineItem.start = new Date();
+			}
+			if (timelineItem.end === undefined){
+				timelineItem.end = maxDate;
+			}
+			if (timelineItem.start.getTime() == timelineItem.end.getTime()){
+				timelineItem.end = utils.addMinutes(timelineItem.end, 30);
+			}
+		}
+		return list;
+	},
+	addScheduleItem: function (item){
+		item.id = uuid.v4();
+		item.dirty = false;
+		module.exports.scheduleList.push(item);
+		module.exports.saveSchedule();
+		return item;
+	},
+  
   loadSchedule: function () {
     try {
       var data = fs.readFileSync('./schedule.json');

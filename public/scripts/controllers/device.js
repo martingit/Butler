@@ -1,16 +1,21 @@
 'use strict';
 
 angular.module('butlerApp')
-  .controller('DeviceCtrl', function ($scope, $http, $log, socket, AppAlert) {
+  .controller('DeviceCtrl', function($scope, $filter, $http, $log, socket, AppAlert) {
+    var orderBy = $filter('orderBy');
+    $scope.order = function(predicate, reverse) {
+      $scope.devices = orderBy($scope.devices, predicate, reverse);
+    };
+    
+    socket.on('update:device', function(response){
+      angular.forEach($scope.devices, function(device) {
+          if (device.id === response.id){
+            $log.info('updating device');
+            device.status = response.status;
+            device.level = response.level;
+          }
+        });
 
-    socket.on('update:device', function (response) {
-      angular.forEach($scope.devices, function (device) {
-        if (device.id === response.id) {
-          $log.info('updating device');
-          device.status = response.status;
-          device.level = response.level;
-        }
-      });
     });
     $scope.$on('$destroy', function () {
       socket.removeAllListeners('update:device');
@@ -18,7 +23,8 @@ angular.module('butlerApp')
     $http.get('/device/')
       .success(function (response) {
         $scope.devices = response.devices;
-      }).error(function (response) {
+        $scope.order('id',false);
+      }).error(function(response) {
         $log.error(response);
         AppAlert.add('danger', response, 2000);
       });
