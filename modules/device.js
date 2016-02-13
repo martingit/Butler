@@ -15,7 +15,9 @@ function nameCompare(a, b) {
 }
 module.exports = {
   dimDevice: function (deviceId, level) {
-      var dimvalue = (level / 100) * 256;
+      var dimvalue = ((level / 100) * 256) -1;
+	if (dimvalue < 0)
+		dimvalue = 0;
     telldus.dim(deviceId, dimvalue);
     var device = module.exports.getDeviceById(deviceId);
     sockets.emit('alert', {
